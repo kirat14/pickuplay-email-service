@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: SSH into VPS and deploy
+      - name: SSH into VPS and deploy (write .env and restart PM2)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -20,4 +20,12 @@ jobs:
             cd ~/pickuplay-email-service
             git pull origin main
             npm install
-            pm2 restart pickuplay-email-service
+            echo "Writing .env (from GitHub Secrets) with restrictive permissions"
+            cat > ~/pickuplay-email-service/.env << 'EOF'
+            GMAIL_USER=${{ secrets.GMAIL_USER }}
+            GMAIL_APP_PASS=${{ secrets.GMAIL_APP_PASS }}
+            EOF
+            # Ensure only the app user can read the env file
+            chmod 600 ~/pickuplay-email-service/.env
+            # Restart the app via PM2 (try restart, otherwise start with ecosystem)
+            pm2 restart pickuplay-email-service || pm2 start ecosystem.config.js --env production
