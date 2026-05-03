@@ -34,6 +34,12 @@ app.use(express.json()); // added: parse JSON bodies
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+app.get('/privacy-policy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'privacy-policy.html'));
+});
+app.get('/terms-and-coditions', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'terms-and-coditions.html'));
+});
 
 // debug request logger
 app.use((req, res, next) => {
