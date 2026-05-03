@@ -31,7 +31,7 @@ function buildOtpEmail(otp) {
 }
 app.use(express.json()); // added: parse JSON bodies
 
-app.get(['/', '/index'], (req, res) => {
+app.get(['/', '/index', '/index.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 app.get('/privacy-policy', (req, res) => {
