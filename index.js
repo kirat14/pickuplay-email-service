@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const path = require('path');
 const app = express();
 const sendEmail = require('./mailer');
 
@@ -29,6 +30,10 @@ function buildOtpEmail(otp) {
   return { subject, html };
 }
 app.use(express.json()); // added: parse JSON bodies
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // debug request logger
 app.use((req, res, next) => {
